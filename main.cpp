@@ -6,7 +6,7 @@
 #include "parser.h"
 #include "ast.h"
 #include "CodeGenerator.h"
-#include "Simulator.h"
+#include "CPU.h"
 
 // Helper function to convert TokenType to string for printing
 std::string tokenTypeToString(TokenType type) {
@@ -142,18 +142,19 @@ int main() {
     // ----------------- Simulation Stage -----------------
     if (!assembly.empty()) {
         try {
-            Simulator cpu;
+            CPU cpu;
             cpu.loadProgram(assembly);
             cpu.run();
             
             std::cout << "\n--- Simulation Results ---" << std::endl;
+            cpu.printState();
             // The example program uses 3 variables (a, b, c)
             // We expect c (at address 2) to be 31
-            cpu.printMemory(3); 
+            cpu.printMemory(0, 3); 
             std::cout << "\nIntegration test completed successfully." << std::endl;
 
         } catch (const std::exception& e) {
-            std::cerr << "\nSimulator Error: " << e.what() << std::endl;
+            std::cerr << "\nCPU Simulation Error: " << e.what() << std::endl;
             return 1;
         }
     }
